@@ -4,9 +4,9 @@ using System.Globalization;
 
 namespace Api.Helpers
 {
-    public class ValueHelper
+    public class ValueHelper : IValueHelperService
     {
-        private static readonly DateTime _minDate = new (2000, 1, 1);
+        private static readonly DateTime _minDate = new(2000, 1, 1);
         private const int MinCountOfLines = 1;
         private const int MaxCountOfLines = 10000;
 
@@ -41,7 +41,7 @@ namespace Api.Helpers
             return values;
         }
 
-        private ValueModel GetValueFromString(string line, int numberLine)
+        public ValueModel GetValueFromString(string line, int numberLine)
         {
             var cells = line.Split(';');
 
@@ -52,16 +52,21 @@ namespace Api.Helpers
 
             int discretTime;
 
-            if (!Int32.TryParse(cells[1], out discretTime) || discretTime < 0)
+            if (!Int32.TryParse(cells[1], out discretTime))
             {
                 throw new InvalidLineException(numberLine);
             }
 
             double parameter;
 
-            if (!Double.TryParse(cells[2], out parameter) || parameter < 0)
+            if (!Double.TryParse(cells[2], out parameter))
             {
                 throw new InvalidLineException(numberLine);
+            }
+
+            if (discretTime < 0 || parameter < 0)
+            {
+                throw new ValueIsNotInRangeException(numberLine);
             }
             var item = new ValueModel
             {
@@ -73,7 +78,7 @@ namespace Api.Helpers
             return item;
         }
 
-        private string[] GetLinesFromCsv(string path)
+        public string[] GetLinesFromCsv(string path)
         {
             if (!File.Exists(path))
             {
@@ -84,15 +89,20 @@ namespace Api.Helpers
             return lines;
         }
 
-        private DateTime GetDateTimeFromStr(string dateString, int numberLine)
+        public DateTime GetDateTimeFromStr(string dateString, int numberLine)
         {
 
             string format = "yyyy-MM-dd_HH-mm-ss";
             DateTime dateTime;
             if (!DateTime.TryParseExact(dateString, format, CultureInfo.InvariantCulture,
-                DateTimeStyles.None, out dateTime) || dateTime < _minDate)
+                DateTimeStyles.None, out dateTime))
             {
                 throw new InvalidLineException(numberLine);
+            }
+
+            if (dateTime < _minDate)
+            {
+                throw new ValueIsNotInRangeException(numberLine);
             }
 
             return dateTime;

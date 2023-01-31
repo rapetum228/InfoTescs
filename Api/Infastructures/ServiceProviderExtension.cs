@@ -1,4 +1,5 @@
-﻿using Api.Mapper;
+﻿using Api.Helpers;
+using Api.Mapper;
 using Api.Services;
 using DAL;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ public static class ServiceProviderExtension
         services.AddScoped<IValueService, ValueService>();
         services.AddScoped<IFileProcessingService, FileProcessingService>();
         services.AddAutoMapper(typeof(MapperProfile).Assembly);
+        services.AddScoped<IValueHelperService, ValueHelper>();
     }
 
     public static void AddDbContext(this IServiceCollection services, ConfigurationManager configuration)

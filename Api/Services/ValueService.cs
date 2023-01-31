@@ -9,14 +9,14 @@ namespace Api.Services;
 
 public class ValueService : IValueService
 {
-    private readonly CsvHelper _csvHelper;
+    private readonly IValueHelperService _csvHelper;
     private readonly ResultHelper _resultHelper;
     private readonly IMapper _mapper;
     private readonly InfotecsDataContext _context;
 
-    public ValueService(IMapper mapper, InfotecsDataContext context)
+    public ValueService(IMapper mapper, IValueHelperService valueHelper, InfotecsDataContext context)
     {
-        _csvHelper = new CsvHelper();
+        _csvHelper = valueHelper;
         _resultHelper = new ResultHelper();
         _context = context;
         _mapper = mapper;
