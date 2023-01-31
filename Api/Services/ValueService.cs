@@ -5,96 +5,80 @@ using DAL;
 using DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Api.Services
+namespace Api.Services;
+
+public class ValueService : IValueService
 {
-    public class ValueService
+    private readonly CsvHelper _csvHelper;
+    private readonly ResultHelper _resultHelper;
+    private readonly IMapper _mapper;
+    private readonly InfotecsDataContext _context;
+
+    public ValueService(IMapper mapper, InfotecsDataContext context)
     {
-        private CsvHelper _csvHelper;
-        private ResultHelper _resultHelper;
-        private IMapper _mapper;
-        private readonly InfotecsDataContext _context;
-        public ValueService(IMapper mapper, InfotecsDataContext context)
+        _csvHelper = new CsvHelper();
+        _resultHelper = new ResultHelper();
+        _context = context;
+        _mapper = mapper;
+    }
+
+    public async Task<ResultOutputModel> ProcessingAndSavingResultAsync(MetaModel meta)
+    {
+
+        var values = _csvHelper.ReadValuesFromLines(meta.CurrentPath);
+        var result = _resultHelper.CalculateResult(values);
+        result.FileName = meta.FileName;
+        result.StartDateTime = meta.StartDateTime;
+        await AddResultAsync(result);
+
+        var outputResult = _mapper.Map<ResultOutputModel>(result);
+
+        return outputResult;
+    }
+
+    public async Task AddResultAsync(ResultModel resultModel)
+    {
+        var oldResult = _context.Results.Include(r => r.Values)
+                                        .Include(r => r.DateTimePeriod)
+                                        .FirstOrDefault(r => r.FileName == resultModel.FileName);
+
+        if (oldResult != null)
         {
-            _csvHelper = new CsvHelper();
-            _resultHelper = new ResultHelper();
-            _context = context;
-            _mapper = mapper;
+            RemoveResult(oldResult);
         }
 
-        public async Task<ResultOutputModel> FileProcessAsync(MetaModel meta)
-        {
+        var result = _mapper.Map<Result>(resultModel);
+        await _context.Results.AddAsync(result);
+        await _context.SaveChangesAsync();
+    }
 
-            var values = _csvHelper.ReadValuesFromLines(meta.CurrentPath);
-            var result = _resultHelper.CalculateResult(values);
-            result.FileName = meta.FileName;
-            result.StartDateTime = meta.StartDateTime;
-            await AddResult(result);
+    public void RemoveResult(Result result)
+    {
+        _context.Values.RemoveRange(result.Values);
+        _context.Results.Remove(result);
+        _context.Periods.Remove(result.DateTimePeriod);
+    }
 
-            var outputResult = _mapper.Map<ResultOutputModel>(result);
+    public async Task<List<ResultModel>> GetResultsByRequestAsync(ResultRequestModel request)
+    {
+        _resultHelper.PrepairRequest(request);
+        var results = _context.Results
+                              .Include(r => r.DateTimePeriod)
+                              .AsNoTracking()
+                              .Where(r => (r.StartDateTime >= request.StartPeriod && r.StartDateTime <= request.EndPeriod)
+                                       && (r.AverageDiscretTime >= request.StartAverageTime && r.AverageDiscretTime <= request.EndAverageTime)
+                                       && (r.AverageParameters >= request.StartAverageParameter && r.AverageParameters <= request.EndAverageParameter)
+                                       && (r.FileName.Contains(request.FileName!)));
 
-            return outputResult;
-        }
+        return _mapper.Map<List<ResultModel>>(await results.ToListAsync());
 
-        public async Task AddResult(ResultModel resultModel)
-        {
-            var oldResult = _context.Results.Include(r => r.Values)
-                                            .Include(r => r.DateTimePeriod)
-                                            .FirstOrDefault(r => r.FileName == resultModel.FileName);
+    }
 
-            if (oldResult != null)
-            {
-                RemoveResult(oldResult);
-            }
+    public async Task<List<ValueModel>> GetValuesByFileNameAsync(string fileName)
+    {
+        var result = await _context.Results.Include(r => r.Values).AsNoTracking().FirstOrDefaultAsync(r => r.FileName == fileName);
 
-            var result = _mapper.Map<Result>(resultModel);
-            await _context.Results.AddAsync(result);
-            await _context.SaveChangesAsync();
-        }
-
-        public void RemoveResult(Result result)
-        {
-            _context.Values.RemoveRange(result.Values);
-            _context.Results.Remove(result);
-            _context.Periods.Remove(result.DateTimePeriod);
-        }
-
-        public async Task<List<ResultModel>> GetResultsByRequest(ResultRequestModel request)
-        {
-            //var results =_context.Results
-            //    .Include(r => r.DateTimePeriod)
-            //    .Where(r => (_resultHelper.CheckContainsInRange(r.AverageParameters, request.StartAverageParameter, request.EndAverageParameter))
-            //           && (_resultHelper.CheckContainsInRange(r.AverageDiscretTime, request.StartAverageTime, request.EndAverageTime))
-            //           && r.FileName.Contains(request.FileName)
-            //           && (r.StartDateTime <= request.EndPeriod && r.StartDateTime >= request.StartPeriod));
-
-            var results = new List<Result>();
-
-            await _context.Results.Include(r => r.DateTimePeriod).ForEachAsync(
-
-                (r) =>
-                {
-                    var fileName = request.FileName is null ? "" : request.FileName;
-                    bool isParam = _resultHelper.CheckContainsInRange(r.AverageParameters, request.StartAverageParameter, request.EndAverageParameter);
-                    bool isTime = _resultHelper.CheckContainsInRange(r.AverageDiscretTime, request.StartAverageTime, request.EndAverageTime);
-                    bool isName = r.FileName.Contains(fileName);
-                    bool isDate = _resultHelper.CheckContainsInRangeDates(r.StartDateTime, request.StartPeriod, request.EndPeriod);
-                    if (isParam && isTime && isName && isDate)
-                    {
-                        results.Add(r);
-                    }
-                }
-
-                );
-
-
-            return _mapper.Map<List<ResultModel>>(results);
-        }
-
-        public async Task<List<ValueModel>> GetValuesByFileName(string fileName)
-        {
-            var result = await _context.Results.Include(r => r.Values).FirstOrDefaultAsync(r => r.FileName == fileName);
-
-            return _mapper.Map<List<ValueModel>>(result?.Values);
-        }
+        return _mapper.Map<List<ValueModel>>(result?.Values);
     }
 }
+

@@ -1,29 +1,23 @@
-using Api.Mapper;
-using Api.Services;
+using Api.Infastructures;
 using Api;
 using DAL;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<InfotecsDataContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("MSSql"), sql => { }); //указали имя строки подключения из appsettings.json
-}, contextLifetime: ServiceLifetime.Scoped);
+builder.Services.AddDbContext(builder.Configuration);
 
-builder.Services.AddScoped<ValueService>();
-builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
+builder.Services.RegisterServices();
+
+builder.Services.RegisterSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

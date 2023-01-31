@@ -2,16 +2,16 @@
 using AutoMapper;
 using DAL.Entities;
 
-namespace Api.Mapper
+namespace Api.Mapper;
+
+public class MapperProfile : Profile
 {
-    public class MapperProfile : Profile
+    public MapperProfile()
     {
-        public MapperProfile()
-        {
-            CreateMap<ValueModel, Value>().ReverseMap();
-            CreateMap<ResultModel, Result>().ReverseMap();
-            CreateMap<ResultModel, ResultOutputModel>();
-            CreateMap<Period, PeriodModel>().ReverseMap();
-        }
+        CreateMap<ValueModel, Value>().ReverseMap();
+        CreateMap<ResultModel, Result>().ReverseMap();
+        CreateMap<ResultModel, ResultOutputModel>();
+        CreateMap<Period, PeriodModel>().ReverseMap();
     }
 }
+

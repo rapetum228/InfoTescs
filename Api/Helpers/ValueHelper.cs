@@ -4,13 +4,13 @@ using System.Globalization;
 
 namespace Api.Helpers
 {
-    public class CsvHelper
+    public class ValueHelper
     {
-        private static readonly DateTime _minDate = new DateTime(2000, 1, 1);
-        private const int _minCountOfLines = 1;
-        private const int _maxCountOfLines = 10000;
+        private static readonly DateTime _minDate = new (2000, 1, 1);
+        private const int MinCountOfLines = 1;
+        private const int MaxCountOfLines = 10000;
 
-        public CsvHelper()
+        public ValueHelper()
         {
 
         }
@@ -20,13 +20,13 @@ namespace Api.Helpers
             int numberLine = 0;
             var lines = GetLinesFromCsv(path);
             //проверки здесь для тестинга
-            if (lines.Length < _minCountOfLines)
+            if (lines.Length < MinCountOfLines)
             {
-                throw new CountLinesException("Строк должно бытьне меньше одной");
+                throw new CountLinesException("The file must contain at least one line");
             }
-            if (lines.Length > _maxCountOfLines)
+            if (lines.Length > MaxCountOfLines)
             {
-                throw new CountLinesException("Строк должно быть не больше 10000");
+                throw new CountLinesException("The file must contain no more than 10000 lines");
             }
 
             var values = new List<ValueModel>();
