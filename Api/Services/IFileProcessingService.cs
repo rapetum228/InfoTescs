@@ -1,12 +1,12 @@
-﻿using Api.Models;
+﻿using InfoTecs.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Api.Services
+namespace InfoTecs.Api.Services
 {
     public interface IFileProcessingService
     {
-        Task<FileContentResult> GetJsonFileAsync(string path, string fileName);
-        Task<string> SaveFileInTempDirectoryAsync(IFormFile file);
+        FileContentResult GetJsonFile(string path, string fileName);
         Task<string> WriteAndSaveValuesInJsonAsync(List<ValueModel> values);
+        string[] GetLinesFromFile(string path);
     }
 }

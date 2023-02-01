@@ -1,14 +1,18 @@
-﻿using Api.Models;
+﻿using InfoTecs.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.Json;
+using SystemInterface.IO;
 
-namespace Api.Services
+namespace InfoTecs.Api.Services
 {
     public class FileProcessingService : IFileProcessingService
     {
-        public FileProcessingService()
+        private readonly IFile _file;
+
+        public FileProcessingService(IFile file)
         {
+            _file = file;
         }
 
         public async Task<string> SaveFileInTempDirectoryAsync(IFormFile file)
@@ -43,19 +47,30 @@ namespace Api.Services
             return tempPath;
         }
 
-        public async Task<FileContentResult> GetJsonFileAsync(string path, string fileName)
+        public FileContentResult GetJsonFile(string path, string fileName)
         {
             if (path.IsNullOrEmpty() || fileName.IsNullOrEmpty())
             {
                 throw new Exception();
             }
             fileName.Concat(".json");
-            FileContentResult result = new FileContentResult(await File.ReadAllBytesAsync(path), "txt/json")
+            FileContentResult result = new FileContentResult(_file.ReadAllBytes(path), "txt/json")
             {
                 FileDownloadName = fileName
             };
 
             return result;
+        }
+
+        public string[] GetLinesFromFile(string path)
+        {
+            if (!_file.Exists(path))
+            {
+                throw new FileNotFoundException("File not found");
+            }
+            var lines = _file.ReadAllLines(path); //ЧЁ С ОПЕРАТИВОЙ
+
+            return lines;
         }
     }
 }

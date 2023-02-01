@@ -1,9 +1,9 @@
-﻿using Api.Models;
+﻿using InfoTecs.Api.Models;
 
-namespace Api.Helpers
+namespace InfoTecs.Api.Helpers
 {
     public interface IValueHelperService
     {
-        List<ValueModel> ReadValuesFromLines(string path);
+        List<ValueModel> ReadValuesFromLines(ICollection<string?> lines);
     }
 }

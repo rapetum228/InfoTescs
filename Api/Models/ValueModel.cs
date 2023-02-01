@@ -1,4 +1,4 @@
-﻿namespace Api.Models;
+﻿namespace InfoTecs.Api.Models;
 
 public class ValueModel
 {
@@ -12,6 +12,11 @@ public class ValueModel
                DateTime == model.DateTime &&
                DiscretTime == model.DiscretTime &&
                Parameter == model.Parameter;
+    }
+
+    public override int GetHashCode()
+    {
+        throw new NotImplementedException();
     }
 }
 

@@ -1,9 +1,12 @@
-﻿using Api.Helpers;
+﻿using InfoTecs.Api.Helpers;
 using Api.Mapper;
-using Api.Services;
+using InfoTecs.Api.Services;
 using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
+using SystemInterface.IO;
+using SystemWrapper.IO;
 
 namespace Api.Infastructures;
 
@@ -15,6 +18,7 @@ public static class ServiceProviderExtension
         services.AddScoped<IFileProcessingService, FileProcessingService>();
         services.AddAutoMapper(typeof(MapperProfile).Assembly);
         services.AddScoped<IValueHelperService, ValueHelper>();
+        services.AddScoped<IFile, FileWrap>();
     }
 
     public static void AddDbContext(this IServiceCollection services, ConfigurationManager configuration)
@@ -30,7 +34,12 @@ public static class ServiceProviderExtension
         services.AddSwaggerGen(config =>
         {
             config.EnableAnnotations();
+            //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            //config.IncludeXmlComments(xmlPath);
         });
     }
+
+
 }
 

@@ -1,4 +1,4 @@
-﻿namespace Api.Exceptions;
+﻿namespace InfoTecs.Api.Exceptions;
 
 public class CountLinesException : Exception
 {

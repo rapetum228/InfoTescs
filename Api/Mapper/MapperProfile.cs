@@ -1,4 +1,4 @@
-﻿using Api.Models;
+﻿using InfoTecs.Api.Models;
 using AutoMapper;
 using DAL.Entities;
 

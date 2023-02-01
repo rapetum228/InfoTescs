@@ -1,11 +1,11 @@
-﻿using Api.Models;
-using Api.Services;
+﻿using InfoTecs.Api.Models;
+using InfoTecs.Api.Services;
 using AutoMapper;
+using InfoTecs.Api.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Text.Json;
 
-namespace Api.Controllers;
+namespace InfoTecs.Api.Controllers;
 
 [Route("api/[controller]/[action]")]
 [ApiController]
@@ -35,9 +35,8 @@ public class ValueController : ControllerBase
         {
             StartDateTime = DateTime.Now,
             FileName = file.FileName,
+            Data = await file.ReadAsListAsync()
         };
-
-        meta.CurrentPath = await _fileProcessingService.SaveFileInTempDirectoryAsync(file);
 
         var result = await _valueService.ProcessingAndSavingResultAsync(meta);
         return result;
@@ -82,7 +81,7 @@ public class ValueController : ControllerBase
 
         var tempPath = await _fileProcessingService.WriteAndSaveValuesInJsonAsync(values);
 
-        FileContentResult result = await _fileProcessingService.GetJsonFileAsync(tempPath, fileName);
+        FileContentResult result = _fileProcessingService.GetJsonFile(tempPath, fileName);
 
         return result;
     }

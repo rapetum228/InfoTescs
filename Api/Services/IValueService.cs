@@ -1,6 +1,6 @@
-﻿using Api.Models;
+﻿using InfoTecs.Api.Models;
 
-namespace Api.Services;
+namespace InfoTecs.Api.Services;
 
 public interface IValueService
 {

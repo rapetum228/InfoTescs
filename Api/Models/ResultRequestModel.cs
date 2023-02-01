@@ -1,4 +1,4 @@
-﻿namespace Api.Models;
+﻿namespace InfoTecs.Api.Models;
 
 public class ResultRequestModel
 {

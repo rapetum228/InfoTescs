@@ -1,22 +1,25 @@
 ﻿using Api.Helpers;
-using Api.Models;
+using InfoTecs.Api.Models;
 using AutoMapper;
 using DAL;
 using DAL.Entities;
+using InfoTecs.Api.Extensions;
+using InfoTecs.Api.Helpers;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
-namespace Api.Services;
+namespace InfoTecs.Api.Services;
 
 public class ValueService : IValueService
 {
-    private readonly IValueHelperService _csvHelper;
+    private readonly IValueHelperService _valueHelper;
     private readonly ResultHelper _resultHelper;
     private readonly IMapper _mapper;
     private readonly InfotecsDataContext _context;
 
-    public ValueService(IMapper mapper, IValueHelperService valueHelper, InfotecsDataContext context)
+    public ValueService(IMapper mapper, IValueHelperService valueHelper, InfotecsDataContext context, IFileProcessingService fileProcessingService)
     {
-        _csvHelper = valueHelper;
+        _valueHelper = valueHelper;
         _resultHelper = new ResultHelper();
         _context = context;
         _mapper = mapper;
@@ -24,8 +27,7 @@ public class ValueService : IValueService
 
     public async Task<ResultOutputModel> ProcessingAndSavingResultAsync(MetaModel meta)
     {
-
-        var values = _csvHelper.ReadValuesFromLines(meta.CurrentPath);
+        var values = _valueHelper.ReadValuesFromLines(meta.Data);
         var result = _resultHelper.CalculateResult(values);
         result.FileName = meta.FileName;
         result.StartDateTime = meta.StartDateTime;
@@ -61,14 +63,19 @@ public class ValueService : IValueService
 
     public async Task<List<ResultModel>> GetResultsByRequestAsync(ResultRequestModel request)
     {
-        _resultHelper.PrepairRequest(request);
-        var results = _context.Results
-                              .Include(r => r.DateTimePeriod)
-                              .AsNoTracking()
-                              .Where(r => (r.StartDateTime >= request.StartPeriod && r.StartDateTime <= request.EndPeriod)
-                                       && (r.AverageDiscretTime >= request.StartAverageTime && r.AverageDiscretTime <= request.EndAverageTime)
-                                       && (r.AverageParameters >= request.StartAverageParameter && r.AverageParameters <= request.EndAverageParameter)
-                                       && (r.FileName.Contains(request.FileName!)));
+        var results =
+            _context.Results
+                .Include(r => r.DateTimePeriod)
+                .AsNoTracking()
+                .AsQueryable()
+                .WhereIf(request.StartPeriod.HasValue, r => r.StartDateTime >= request.StartPeriod)
+                .WhereIf(request.EndPeriod.HasValue, r => r.StartDateTime <= request.EndPeriod)
+                .WhereIf(request.StartAverageTime.HasValue, r => r.AverageDiscretTime >= request.StartAverageTime)
+                .WhereIf(request.EndAverageTime.HasValue, r => r.AverageDiscretTime <= request.EndAverageTime)
+                .WhereIf(request.StartAverageParameter.HasValue,
+                    r => r.AverageParameters >= request.StartAverageParameter)
+                .WhereIf(request.EndAverageParameter.HasValue, r => r.AverageParameters <= request.EndAverageParameter)
+                .WhereIf(!string.IsNullOrWhiteSpace(request.FileName), r => r.FileName.Contains(request.FileName!));
 
         return _mapper.Map<List<ResultModel>>(await results.ToListAsync());
 
