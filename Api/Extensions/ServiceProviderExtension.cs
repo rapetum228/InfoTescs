@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 using SystemInterface.IO;
 using SystemWrapper.IO;
+using Api.Helpers;
 
 namespace Api.Infastructures;
 
@@ -18,6 +19,7 @@ public static class ServiceProviderExtension
         services.AddScoped<IFileProcessingService, FileProcessingService>();
         services.AddAutoMapper(typeof(MapperProfile).Assembly);
         services.AddScoped<IValueHelperService, ValueHelper>();
+        services.AddScoped<IResultHelperService, ResultHelper>();
         services.AddScoped<IFile, FileWrap>();
     }
 

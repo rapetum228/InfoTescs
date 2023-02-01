@@ -27,9 +27,17 @@ namespace Api
             {
                 await ConstructResponse(context, HttpStatusCode.BadRequest, error.Message);
             }
-            catch (FileNotFoundException error)
+            catch(ValueIsNotInRangeException error)
             {
-                await ConstructResponse(context, HttpStatusCode.InternalServerError, error.Message);//NotFound???
+                await ConstructResponse(context, HttpStatusCode.BadRequest, error.Message);
+            }
+            catch (NotFoundException error)
+            {
+                await ConstructResponse(context, HttpStatusCode.NotFound, error.Message);
+            }
+            catch (ArgumentException error)
+            {
+                await ConstructResponse(context, HttpStatusCode.InternalServerError, error.Message);
             }
             catch (Exception error)
             {

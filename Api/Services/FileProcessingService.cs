@@ -1,6 +1,8 @@
 ﻿using InfoTecs.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 using System.Text.Json;
 using SystemInterface.IO;
 
@@ -8,69 +10,35 @@ namespace InfoTecs.Api.Services
 {
     public class FileProcessingService : IFileProcessingService
     {
-        private readonly IFile _file;
+        private const string JsonFileExtension = ".json";
+        private const string JsonFileFormat = "txt/json";
 
-        public FileProcessingService(IFile file)
+        public FileProcessingService()
         {
-            _file = file;
+
         }
 
-        public async Task<string> SaveFileInTempDirectoryAsync(IFormFile file)
+        public byte[] WriteBytesValuesInJson(List<ValueModel> values)
         {
-            if (file.ContentType != "text/csv")
-            {
-                throw new FormatException("Only csv format file");
-            }
-
-            var path = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-
-            using (var stream = System.IO.File.Create(path))
-            {
-                await file.CopyToAsync(stream);
-            }
-
-            return path;
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            var json = JsonSerializer.Serialize(values, options);
+            var bytes = Encoding.UTF8.GetBytes(json);
+            return bytes;
         }
-
-        public async Task<string> WriteAndSaveValuesInJsonAsync(List<ValueModel> values)
+       
+        public FileContentResult GetJsonFileFromBytes(byte[] buffer, string fileName)
         {
-            if (values.IsNullOrEmpty())
+            if (fileName.IsNullOrEmpty())
             {
-                return string.Empty;
+                throw new ArgumentException("File name must not be empty");
             }
-            var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-
-            using (FileStream fs = new FileStream(tempPath, FileMode.OpenOrCreate))
-            {
-                await JsonSerializer.SerializeAsync(fs, values);
-            }
-            return tempPath;
-        }
-
-        public FileContentResult GetJsonFile(string path, string fileName)
-        {
-            if (path.IsNullOrEmpty() || fileName.IsNullOrEmpty())
-            {
-                throw new Exception();
-            }
-            fileName.Concat(".json");
-            FileContentResult result = new FileContentResult(_file.ReadAllBytes(path), "txt/json")
+            fileName += JsonFileExtension;
+            FileContentResult result = new FileContentResult(buffer, JsonFileFormat)
             {
                 FileDownloadName = fileName
             };
 
             return result;
-        }
-
-        public string[] GetLinesFromFile(string path)
-        {
-            if (!_file.Exists(path))
-            {
-                throw new FileNotFoundException("File not found");
-            }
-            var lines = _file.ReadAllLines(path); //ЧЁ С ОПЕРАТИВОЙ
-
-            return lines;
         }
     }
 }

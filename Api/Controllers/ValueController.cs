@@ -77,11 +77,11 @@ public class ValueController : ControllerBase
     [SwaggerOperation("Search values by the full file name of a file that was loaded and processed earlier.The result of the method is returned in a JSON file.")]
     public async Task<FileResult> DownloadValues(string fileName)
     {
-        var values = await _valueService.GetValuesByFileNameAsync(fileName);
+        var values = await _valueService.GetValuesByFileNameAsync(fileName); //not found
 
-        var tempPath = await _fileProcessingService.WriteAndSaveValuesInJsonAsync(values);
+        var bytes = _fileProcessingService.WriteBytesValuesInJson(values);
 
-        FileContentResult result = _fileProcessingService.GetJsonFile(tempPath, fileName);
+        var result = _fileProcessingService.GetJsonFileFromBytes(bytes, fileName);
 
         return result;
     }

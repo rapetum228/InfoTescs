@@ -7,20 +7,25 @@ using InfoTecs.Api.Extensions;
 using InfoTecs.Api.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using InfoTecs.Api.Exceptions;
 
 namespace InfoTecs.Api.Services;
 
 public class ValueService : IValueService
 {
     private readonly IValueHelperService _valueHelper;
-    private readonly ResultHelper _resultHelper;
+    private readonly IResultHelperService _resultHelper;
     private readonly IMapper _mapper;
     private readonly InfotecsDataContext _context;
 
-    public ValueService(IMapper mapper, IValueHelperService valueHelper, InfotecsDataContext context, IFileProcessingService fileProcessingService)
+    public ValueService(IMapper mapper,
+                        IResultHelperService resultHelperService,
+                        IValueHelperService valueHelper, 
+                        InfotecsDataContext context, 
+                        IFileProcessingService fileProcessingService)
     {
         _valueHelper = valueHelper;
-        _resultHelper = new ResultHelper();
+        _resultHelper = resultHelperService;
         _context = context;
         _mapper = mapper;
     }
@@ -84,6 +89,9 @@ public class ValueService : IValueService
     public async Task<List<ValueModel>> GetValuesByFileNameAsync(string fileName)
     {
         var result = await _context.Results.Include(r => r.Values).AsNoTracking().FirstOrDefaultAsync(r => r.FileName == fileName);
+
+        if (result is null)
+            throw new NotFoundException();
 
         return _mapper.Map<List<ValueModel>>(result?.Values);
     }
