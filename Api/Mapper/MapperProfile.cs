@@ -1,6 +1,7 @@
 ﻿using InfoTecs.Api.Models;
 using AutoMapper;
-using DAL.Entities;
+using InfoTecs.DAL.Entities;
+using InfoTecs.DAL.Additions;
 
 namespace Api.Mapper;
 
@@ -12,6 +13,7 @@ public class MapperProfile : Profile
         CreateMap<ResultModel, Result>().ReverseMap();
         CreateMap<ResultModel, ResultOutputModel>();
         CreateMap<Period, PeriodModel>().ReverseMap();
+        CreateMap<ResultRequestModel, ResultRequest>();
     }
 }
 

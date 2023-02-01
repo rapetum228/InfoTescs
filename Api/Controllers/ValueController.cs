@@ -31,15 +31,26 @@ public class ValueController : ControllerBase
     [HttpPost]
     public async Task<ResultOutputModel> UploadFile(IFormFile file)
     {
+        CheckFileContentType(file);
+        
         MetaModel meta = new()
         {
             StartDateTime = DateTime.Now,
-            FileName = file.FileName,
+            FileName = Path.ChangeExtension(file.FileName, null),
             Data = await file.ReadAsListAsync()
         };
 
         var result = await _valueService.ProcessingAndSavingResultAsync(meta);
         return result;
+    }
+
+    private void CheckFileContentType(IFormFile file)
+    {
+        var correctContentType = "text/csv";
+        if (file.ContentType != correctContentType)
+        {
+            throw new ArgumentException("The uploaded file is not in CSV format");
+        }
     }
 
     /// <summary>

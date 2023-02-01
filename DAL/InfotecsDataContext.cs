@@ -1,7 +1,7 @@
-﻿using DAL.Entities;
+﻿using InfoTecs.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace DAL
+namespace InfoTecs.DAL
 {
     public class InfotecsDataContext : DbContext
     {
@@ -13,7 +13,6 @@ namespace DAL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Result>().HasIndex(n => n.FileName).IsUnique();
-
         }
 
         public DbSet<Result> Results { get; set; }

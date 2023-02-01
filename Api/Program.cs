@@ -1,6 +1,6 @@
 using Api.Infastructures;
 using Api;
-using DAL;
+using InfoTecs.DAL;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

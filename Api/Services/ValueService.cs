@@ -1,13 +1,15 @@
 ﻿using Api.Helpers;
 using InfoTecs.Api.Models;
 using AutoMapper;
-using DAL;
-using DAL.Entities;
+using InfoTecs.DAL;
+using InfoTecs.DAL.Entities;
 using InfoTecs.Api.Extensions;
 using InfoTecs.Api.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using InfoTecs.Api.Exceptions;
+using InfoTecs.DAL.Repositories;
+using InfoTecs.DAL.Additions;
 
 namespace InfoTecs.Api.Services;
 
@@ -15,18 +17,17 @@ public class ValueService : IValueService
 {
     private readonly IValueHelperService _valueHelper;
     private readonly IResultHelperService _resultHelper;
+    private readonly IResultRepository _resultRepository;
     private readonly IMapper _mapper;
-    private readonly InfotecsDataContext _context;
-
+    
     public ValueService(IMapper mapper,
                         IResultHelperService resultHelperService,
-                        IValueHelperService valueHelper, 
-                        InfotecsDataContext context, 
-                        IFileProcessingService fileProcessingService)
+                        IValueHelperService valueHelper,
+                        IResultRepository resultRepository)
     {
         _valueHelper = valueHelper;
         _resultHelper = resultHelperService;
-        _context = context;
+        _resultRepository = resultRepository;
         _mapper = mapper;
     }
 
@@ -34,7 +35,8 @@ public class ValueService : IValueService
     {
         var values = _valueHelper.ReadValuesFromLines(meta.Data);
         var result = _resultHelper.CalculateResult(values);
-        result.FileName = meta.FileName;
+        var fileName = meta.FileName;
+        result.FileName = fileName;
         result.StartDateTime = meta.StartDateTime;
         await AddResultAsync(result);
 
@@ -45,55 +47,28 @@ public class ValueService : IValueService
 
     public async Task AddResultAsync(ResultModel resultModel)
     {
-        var oldResult = _context.Results.Include(r => r.Values)
-                                        .Include(r => r.DateTimePeriod)
-                                        .FirstOrDefault(r => r.FileName == resultModel.FileName);
-
-        if (oldResult != null)
-        {
-            RemoveResult(oldResult);
-        }
-
         var result = _mapper.Map<Result>(resultModel);
-        await _context.Results.AddAsync(result);
-        await _context.SaveChangesAsync();
+        await _resultRepository.AddResultAsync(result);
     }
 
-    public void RemoveResult(Result result)
+    public async Task<List<ResultModel>> GetResultsByRequestAsync(ResultRequestModel requestModel)
     {
-        _context.Values.RemoveRange(result.Values);
-        _context.Results.Remove(result);
-        _context.Periods.Remove(result.DateTimePeriod);
-    }
+        var request = _mapper.Map<ResultRequest>(requestModel);
 
-    public async Task<List<ResultModel>> GetResultsByRequestAsync(ResultRequestModel request)
-    {
-        var results =
-            _context.Results
-                .Include(r => r.DateTimePeriod)
-                .AsNoTracking()
-                .AsQueryable()
-                .WhereIf(request.StartPeriod.HasValue, r => r.StartDateTime >= request.StartPeriod)
-                .WhereIf(request.EndPeriod.HasValue, r => r.StartDateTime <= request.EndPeriod)
-                .WhereIf(request.StartAverageTime.HasValue, r => r.AverageDiscretTime >= request.StartAverageTime)
-                .WhereIf(request.EndAverageTime.HasValue, r => r.AverageDiscretTime <= request.EndAverageTime)
-                .WhereIf(request.StartAverageParameter.HasValue,
-                    r => r.AverageParameters >= request.StartAverageParameter)
-                .WhereIf(request.EndAverageParameter.HasValue, r => r.AverageParameters <= request.EndAverageParameter)
-                .WhereIf(!string.IsNullOrWhiteSpace(request.FileName), r => r.FileName.Contains(request.FileName!));
+        var results = _resultRepository.GetResulsByRequestAsync(request);
 
-        return _mapper.Map<List<ResultModel>>(await results.ToListAsync());
+        return _mapper.Map<List<ResultModel>>(await results);
 
     }
 
     public async Task<List<ValueModel>> GetValuesByFileNameAsync(string fileName)
     {
-        var result = await _context.Results.Include(r => r.Values).AsNoTracking().FirstOrDefaultAsync(r => r.FileName == fileName);
+        var values = await _resultRepository.GetValuesByFileNameAsync(fileName);
 
-        if (result is null)
+        if (values is null)
             throw new NotFoundException();
 
-        return _mapper.Map<List<ValueModel>>(result?.Values);
+        return _mapper.Map<List<ValueModel>>(values);
     }
 }
 

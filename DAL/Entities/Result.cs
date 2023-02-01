@@ -1,4 +1,4 @@
-﻿namespace DAL.Entities
+﻿namespace InfoTecs.DAL.Entities
 {
     public class Result
     {

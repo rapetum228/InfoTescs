@@ -1,13 +1,14 @@
 ﻿using InfoTecs.Api.Helpers;
 using Api.Mapper;
 using InfoTecs.Api.Services;
-using DAL;
+using InfoTecs.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using SystemInterface.IO;
 using SystemWrapper.IO;
 using Api.Helpers;
+using InfoTecs.DAL.Repositories;
 
 namespace Api.Infastructures;
 
@@ -20,7 +21,7 @@ public static class ServiceProviderExtension
         services.AddAutoMapper(typeof(MapperProfile).Assembly);
         services.AddScoped<IValueHelperService, ValueHelper>();
         services.AddScoped<IResultHelperService, ResultHelper>();
-        services.AddScoped<IFile, FileWrap>();
+        services.AddScoped<IResultRepository, ResultRepository>();
     }
 
     public static void AddDbContext(this IServiceCollection services, ConfigurationManager configuration)
