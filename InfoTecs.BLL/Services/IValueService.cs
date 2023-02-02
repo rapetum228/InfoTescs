@@ -1,10 +1,11 @@
-﻿using InfoTecs.Api.Models;
+﻿using InfoTecs.BLL.Models;
 
-namespace InfoTecs.Api.Services;
+namespace InfoTecs.BLL.Services;
 
 public interface IValueService
 {
-    Task<ResultOutputModel> ProcessingAndSavingResultAsync(MetaModel meta);
+    ResultModel ProcessingDataToResult(MetaModel meta);
     Task<List<ResultModel>> GetResultsByRequestAsync(ResultRequestModel request);
     Task<List<ValueModel>> GetValuesByFileNameAsync(string fileName);
+    Task<ResultOutputModel> AddResultAsync(ResultModel resultModel);
 }

@@ -1,4 +1,4 @@
-﻿using InfoTecs.Api.Models;
+﻿using InfoTecs.BLL.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -25,7 +25,7 @@ namespace InfoTecs.Api.Services
             var bytes = Encoding.UTF8.GetBytes(json);
             return bytes;
         }
-       
+
         public FileContentResult GetJsonFileFromBytes(byte[] buffer, string fileName)
         {
             if (fileName.IsNullOrEmpty())

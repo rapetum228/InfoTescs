@@ -1,6 +1,6 @@
-﻿using InfoTecs.Api.Exceptions;
-using InfoTecs.Api.Helpers;
-using InfoTecs.Api.Models;
+﻿using InfoTecs.BLL.Exceptions;
+using InfoTecs.BLL.Helpers;
+using InfoTecs.BLL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

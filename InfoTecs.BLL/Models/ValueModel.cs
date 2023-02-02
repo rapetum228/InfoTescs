@@ -1,5 +1,4 @@
-﻿namespace InfoTecs.Api.Models;
-
+﻿namespace InfoTecs.BLL.Models;
 public class ValueModel
 {
     public DateTime DateTime { get; set; }

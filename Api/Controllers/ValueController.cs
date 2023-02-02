@@ -1,9 +1,10 @@
-﻿using InfoTecs.Api.Models;
-using InfoTecs.Api.Services;
+﻿using InfoTecs.BLL.Models;
+using InfoTecs.BLL.Services;
 using AutoMapper;
 using InfoTecs.Api.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using InfoTecs.Api.Services;
 
 namespace InfoTecs.Api.Controllers;
 
@@ -40,8 +41,11 @@ public class ValueController : ControllerBase
             Data = await file.ReadAsListAsync()
         };
 
-        var result = await _valueService.ProcessingAndSavingResultAsync(meta);
-        return result;
+        var resultModel = _valueService.ProcessingDataToResult(meta);
+
+        var resultOutput = await _valueService.AddResultAsync(resultModel);
+
+        return resultOutput;
     }
 
     private void CheckFileContentType(IFormFile file)

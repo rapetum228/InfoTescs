@@ -1,8 +1,7 @@
-﻿using InfoTecs.Api.Exceptions;
-using InfoTecs.Api.Models;
-using Microsoft.AspNetCore.Http.Metadata;
+﻿using InfoTecs.BLL.Exceptions;
+using InfoTecs.BLL.Models;
 
-namespace Api.Helpers;
+namespace InfoTecs.BLL.Helpers;
 
 public class ResultHelper : IResultHelperService
 {

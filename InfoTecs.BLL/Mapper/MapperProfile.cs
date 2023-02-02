@@ -1,9 +1,9 @@
-﻿using InfoTecs.Api.Models;
+﻿using InfoTecs.BLL.Models;
 using AutoMapper;
 using InfoTecs.DAL.Entities;
 using InfoTecs.DAL.Additions;
 
-namespace Api.Mapper;
+namespace InfoTecs.BLL.Mapper;
 
 public class MapperProfile : Profile
 {

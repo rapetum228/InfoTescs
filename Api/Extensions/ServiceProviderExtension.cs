@@ -1,14 +1,10 @@
-﻿using InfoTecs.Api.Helpers;
-using Api.Mapper;
+﻿using InfoTecs.BLL.Helpers;
+using InfoTecs.BLL.Mapper;
 using InfoTecs.Api.Services;
 using InfoTecs.DAL;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using System.Reflection;
-using SystemInterface.IO;
-using SystemWrapper.IO;
-using Api.Helpers;
 using InfoTecs.DAL.Repositories;
+using InfoTecs.BLL.Services;
 
 namespace Api.Infastructures;
 

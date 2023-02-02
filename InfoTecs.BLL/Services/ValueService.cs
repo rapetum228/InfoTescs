@@ -1,17 +1,15 @@
-﻿using Api.Helpers;
-using InfoTecs.Api.Models;
+﻿using InfoTecs.BLL.Helpers;
+using InfoTecs.BLL.Models;
 using AutoMapper;
 using InfoTecs.DAL;
 using InfoTecs.DAL.Entities;
-using InfoTecs.Api.Extensions;
-using InfoTecs.Api.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using InfoTecs.Api.Exceptions;
+using InfoTecs.BLL.Exceptions;
 using InfoTecs.DAL.Repositories;
 using InfoTecs.DAL.Additions;
 
-namespace InfoTecs.Api.Services;
+namespace InfoTecs.BLL.Services;
 
 public class ValueService : IValueService
 {
@@ -31,24 +29,24 @@ public class ValueService : IValueService
         _mapper = mapper;
     }
 
-    public async Task<ResultOutputModel> ProcessingAndSavingResultAsync(MetaModel meta)
+    public ResultModel ProcessingDataToResult(MetaModel meta)
     {
         var values = _valueHelper.ReadValuesFromLines(meta.Data);
         var result = _resultHelper.CalculateResult(values);
         var fileName = meta.FileName;
         result.FileName = fileName;
         result.StartDateTime = meta.StartDateTime;
-        await AddResultAsync(result);
 
-        var outputResult = _mapper.Map<ResultOutputModel>(result);
-
-        return outputResult;
+        return result;
     }
 
-    public async Task AddResultAsync(ResultModel resultModel)
+    public async Task<ResultOutputModel> AddResultAsync(ResultModel resultModel)
     {
         var result = _mapper.Map<Result>(resultModel);
         await _resultRepository.AddResultAsync(result);
+        var outputResult = _mapper.Map<ResultOutputModel>(result);
+
+        return outputResult;
     }
 
     public async Task<List<ResultModel>> GetResultsByRequestAsync(ResultRequestModel requestModel)

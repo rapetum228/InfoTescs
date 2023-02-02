@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InfoTecs.Api", "Api\InfoTec
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InfoTecs.DAL", "DAL\InfoTecs.DAL.csproj", "{28105B93-F489-444E-A736-A73ACFF78D77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfoTecs.Api.Tests", "Tests\InfoTecs.Api.Tests.csproj", "{F97924AF-A41C-46E5-B604-4495BF1D8030}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfoTecs.BLL.Tests", "Tests\InfoTecs.BLL.Tests.csproj", "{F97924AF-A41C-46E5-B604-4495BF1D8030}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfoTecs.BLL", "InfoTecs.BLL\InfoTecs.BLL.csproj", "{990246FC-BDDC-4591-BECD-5ECDC692941B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{F97924AF-A41C-46E5-B604-4495BF1D8030}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F97924AF-A41C-46E5-B604-4495BF1D8030}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F97924AF-A41C-46E5-B604-4495BF1D8030}.Release|Any CPU.Build.0 = Release|Any CPU
+		{990246FC-BDDC-4591-BECD-5ECDC692941B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{990246FC-BDDC-4591-BECD-5ECDC692941B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{990246FC-BDDC-4591-BECD-5ECDC692941B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{990246FC-BDDC-4591-BECD-5ECDC692941B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

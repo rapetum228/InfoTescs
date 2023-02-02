@@ -1,4 +1,4 @@
-﻿using InfoTecs.Api.Exceptions;
+﻿using InfoTecs.BLL.Exceptions;
 using System.Net;
 using System.Text.Json;
 

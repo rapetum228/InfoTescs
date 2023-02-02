@@ -1,5 +1,4 @@
-﻿namespace InfoTecs.Api.Models;
-
+﻿namespace InfoTecs.BLL.Models;
 public class ResultOutputModel
 {
     public string FileName { get; set; } = null!;

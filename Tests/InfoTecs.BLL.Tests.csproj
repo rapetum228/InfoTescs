@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Api\InfoTecs.Api.csproj" />
+    <ProjectReference Include="..\InfoTecs.BLL\InfoTecs.BLL.csproj" />
   </ItemGroup>
 
 </Project>

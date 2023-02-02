@@ -1,6 +1,6 @@
-﻿using InfoTecs.Api.Models;
+﻿using InfoTecs.BLL.Models;
 
-namespace InfoTecs.Api.Helpers
+namespace InfoTecs.BLL.Helpers
 {
     public interface IValueHelperService
     {

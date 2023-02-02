@@ -1,8 +1,8 @@
-﻿using InfoTecs.Api.Exceptions;
+﻿using InfoTecs.BLL.Exceptions;
 using System.ComponentModel;
 using System.Globalization;
 
-namespace InfoTecs.Api.Helpers
+namespace InfoTecs.BLL.Helpers
 {
     public static class ParserHelper
     {

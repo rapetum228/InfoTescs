@@ -1,12 +1,11 @@
-﻿using InfoTecs.Api.Exceptions;
-using InfoTecs.Api.Models;
-using InfoTecs.Api.Services;
+﻿using InfoTecs.BLL.Exceptions;
+using InfoTecs.BLL.Models;
+using InfoTecs.BLL.Services;
 using System;
 using System.ComponentModel;
 using System.Globalization;
-using SystemInterface.IO;
 
-namespace InfoTecs.Api.Helpers;
+namespace InfoTecs.BLL.Helpers;
 
 public class ValueHelper : IValueHelperService
 {

@@ -1,4 +1,4 @@
-﻿namespace InfoTecs.Api.Exceptions;
+﻿namespace InfoTecs.BLL.Exceptions;
 
 public class ValueIsNotInRangeException : Exception
 {

@@ -1,4 +1,4 @@
-﻿namespace InfoTecs.Api.Models;
+﻿namespace InfoTecs.BLL.Models;
 
 public class PeriodModel
 {
