@@ -3,7 +3,7 @@ using AutoMapper;
 using InfoTecs.DAL.Entities;
 using InfoTecs.DAL.Additions;
 
-namespace InfoTecs.BLL.Mapper;
+namespace InfoTecs.BLL.Mappers;
 
 public class MapperProfile : Profile
 {

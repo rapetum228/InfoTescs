@@ -18,7 +18,7 @@ namespace InfoTecs.DAL.Repositories
         {
             _context = context;
         }
-        public async Task<List<Result>> GetResulsByRequestAsync(ResultRequest request)
+        public async Task<List<Result>> GetResultsByRequestAsync(ResultRequest request)
         {
             var results =
                 _context.Results
@@ -64,6 +64,7 @@ namespace InfoTecs.DAL.Repositories
             _context.Values.RemoveRange(result.Values);
             _context.Results.Remove(result);
             _context.Periods.Remove(result.DateTimePeriod);
+            _context.SaveChanges();
         }
     }
 

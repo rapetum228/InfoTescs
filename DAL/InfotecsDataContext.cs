@@ -7,8 +7,8 @@ namespace InfoTecs.DAL
     {
         public InfotecsDataContext(DbContextOptions<InfotecsDataContext> options) : base(options) { }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseSqlServer(b => b.MigrationsAssembly("InfoTecs.Api"));
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //    => optionsBuilder.UseSqlServer(b => b.MigrationsAssembly("InfoTecs.Api"));
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

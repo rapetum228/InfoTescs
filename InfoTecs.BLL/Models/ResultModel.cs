@@ -17,5 +17,10 @@ public class ResultModel : ResultOutputModel
                CountLines == model.CountLines &&
                FileName == model.FileName;
     }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
 }
 

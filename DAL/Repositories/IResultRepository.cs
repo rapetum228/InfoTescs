@@ -6,7 +6,7 @@ namespace InfoTecs.DAL.Repositories
     public interface IResultRepository
     {
         Task AddResultAsync(Result result);
-        Task<List<Result>> GetResulsByRequestAsync(ResultRequest request);
+        Task<List<Result>> GetResultsByRequestAsync(ResultRequest request);
         Task<ICollection<Value>?> GetValuesByFileNameAsync(string fileName);
     }
 }

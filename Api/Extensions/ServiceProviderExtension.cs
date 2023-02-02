@@ -1,5 +1,5 @@
 ﻿using InfoTecs.BLL.Helpers;
-using InfoTecs.BLL.Mapper;
+using InfoTecs.BLL.Mappers;
 using InfoTecs.Api.Services;
 using InfoTecs.DAL;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +24,7 @@ public static class ServiceProviderExtension
     {
         services.AddDbContext<InfotecsDataContext>(options =>
         {
-            options.UseSqlServer(configuration.GetConnectionString("MSSql"), sql => { });
+            options.UseSqlServer(configuration.GetConnectionString("MSSql"), b => b.MigrationsAssembly("InfoTecs.Api"));
         }, contextLifetime: ServiceLifetime.Scoped);
     }
 

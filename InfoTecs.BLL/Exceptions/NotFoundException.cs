@@ -2,5 +2,5 @@
 
 public class NotFoundException : Exception
 {
-    public NotFoundException(string message = "Not found") : base(message) { }
+    public NotFoundException(string message = "Nothing found for your request") : base(message) { }
 }

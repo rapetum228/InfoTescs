@@ -7,13 +7,13 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using InfoTecs.Api.Tests.HelperTest.TestData;
+using InfoTecs.BLL.Tests.HelperTests.TestData;
 using Moq;
 using SystemWrapper.IO;
 using SystemWrapper.IO.Compression;
 using System.IO.Abstractions;
 
-namespace InfoTecs.Api.Tests.HelperTest
+namespace InfoTecs.BLL.Tests.HelperTest
 {
     public class ValueHelperTests
     {

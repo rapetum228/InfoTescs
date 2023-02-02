@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InfoTecs.Api.Tests.HelperTest.TestData
+namespace InfoTecs.BLL.Tests.HelperTests.TestData
 {
     public class ResultHelperTestData
     {
