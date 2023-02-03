@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DAL\InfoTecs.DAL.csproj" />
+    <ProjectReference Include="..\InfoTecs.DAL\InfoTecs.DAL.csproj" />
   </ItemGroup>
 
 </Project>

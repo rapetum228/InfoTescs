@@ -128,7 +128,7 @@ public class ResultServiceTest
     {
         //given
         var results = _testData.GetResultsForTest();
-        _resultRepository.Setup(x => x.GetResultsByRequestAsync(It.IsAny<ResultRequest>())).Returns(results);
+        _resultRepository.Setup(x => x.GetResultsByRequestAsync(It.IsAny<ResultRequest>())).Returns(results!);
         var sut = new ResultService(_mapper, _resultHelper.Object, _valueHelper.Object, _resultRepository.Object);
 
         //when
@@ -144,7 +144,7 @@ public class ResultServiceTest
     {
         //given
         var results = _testData.GetResultsForTest(numberCase);
-        _resultRepository.Setup(x => x.GetResultsByRequestAsync(It.IsAny<ResultRequest>())).Returns(results);
+        _resultRepository.Setup(x => x.GetResultsByRequestAsync(It.IsAny<ResultRequest>())).Returns(results!);
         var sut = new ResultService(_mapper, _resultHelper.Object, _valueHelper.Object, _resultRepository.Object);
 
         //when

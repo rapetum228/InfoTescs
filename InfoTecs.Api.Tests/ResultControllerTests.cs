@@ -134,7 +134,7 @@ public class ResultControllerTests
         var fileName = "file";
         var values = _testData.GetValueModels(0);
 
-        _resultService.Setup(x => x.GetValuesByFileNameAsync(fileName)).Returns(values);
+        _resultService.Setup(x => x.GetValuesByFileNameAsync(fileName)).Returns(values!);
         var sut = new ResultController(_resultService.Object, _fileProcessingService.Object, _mapper);
 
         //when
