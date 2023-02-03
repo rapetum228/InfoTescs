@@ -27,7 +27,7 @@ namespace Api
             {
                 await ConstructResponse(context, HttpStatusCode.BadRequest, error.Message);
             }
-            catch(ValueIsNotInRangeException error)
+            catch (ValueIsNotInRangeException error)
             {
                 await ConstructResponse(context, HttpStatusCode.BadRequest, error.Message);
             }
@@ -36,6 +36,10 @@ namespace Api
                 await ConstructResponse(context, HttpStatusCode.NotFound, error.Message);
             }
             catch (ArgumentException error)
+            {
+                await ConstructResponse(context, HttpStatusCode.InternalServerError, error.Message);
+            }
+            catch (ProcessFailedException error)
             {
                 await ConstructResponse(context, HttpStatusCode.InternalServerError, error.Message);
             }

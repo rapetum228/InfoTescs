@@ -1,17 +1,6 @@
-﻿using InfoTecs.BLL.Exceptions;
-using InfoTecs.BLL.Helpers;
+﻿using InfoTecs.BLL.Helpers;
 using InfoTecs.BLL.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using InfoTecs.BLL.Tests.HelperTests.TestData;
-using Moq;
-using SystemWrapper.IO;
-using SystemWrapper.IO.Compression;
-using System.IO.Abstractions;
 
 namespace InfoTecs.BLL.Tests.HelperTest
 {
@@ -83,16 +72,16 @@ namespace InfoTecs.BLL.Tests.HelperTest
             var expected = _testData.GetValueModelsForExpectedResult(numberCase);
 
             //when
-            var actual =_valueHelper.ReadValuesFromLines(lines);
+            var actual = _valueHelper.ReadValuesFromLines(lines);
 
             //than
             Assert.That(actual, Is.EqualTo(expected));
         }
 
-        [TestCase(1,1,1)]
-        [TestCase(2,0, 1)]
+        [TestCase(1, 1, 1)]
+        [TestCase(2, 0, 1)]
         [TestCase(3, 2, 4)]
-        [TestCase(0,3,0)]
+        [TestCase(0, 3, 0)]
         public void ReadValuesFromLines_NegativeTest(int numberCase, int numberExceptionCase, int numberLine)
         {
             //given
@@ -101,7 +90,7 @@ namespace InfoTecs.BLL.Tests.HelperTest
             var expectedMessage = _testData.GetExceptionMessage(numberExceptionCase, numberLine);
             //when
             Exception ex = Assert.Throws(typeException, () => _valueHelper.ReadValuesFromLines(lines));
-            
+
 
             //than
             Assert.IsInstanceOf(typeException, ex);

@@ -1,5 +1,5 @@
-using Api.Infastructures;
 using Api;
+using Api.Infastructures;
 using InfoTecs.DAL;
 using Microsoft.EntityFrameworkCore;
 

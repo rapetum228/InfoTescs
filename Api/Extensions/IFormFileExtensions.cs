@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace InfoTecs.Api.Extensions
+﻿namespace InfoTecs.Api.Extensions
 {
     public static class IFormFileExtensions
     {

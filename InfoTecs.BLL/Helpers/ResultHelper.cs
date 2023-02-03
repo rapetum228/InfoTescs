@@ -1,17 +1,17 @@
-﻿using InfoTecs.BLL.Exceptions;
-using InfoTecs.BLL.Models;
+﻿using InfoTecs.BLL.Models;
 
 namespace InfoTecs.BLL.Helpers;
 
 public class ResultHelper : IResultHelperService
 {
+    private const int MinCountOfValues = 1;
+    private const int MinCorrectValueForDifferenceBetweenDates = 0;
+
     public ResultModel CalculateResult(List<ValueModel> values)
     {
-        if (values.Count < 1)
-        {
-            throw new CountLinesException("The file must contain at least one line");
-        }
-        //ЧЁ С ОПЕРАТИВОЙ
+        if (values.Count < MinCountOfValues)
+            throw new ArgumentException("The list of values must contain at least one value");
+
         var resultModel = new ResultModel
         {
             MaximalParameter = values.Max(x => x.Parameter),
@@ -19,7 +19,7 @@ public class ResultHelper : IResultHelperService
             AverageParameters = values.Average(x => x.Parameter),
             AverageDiscretTime = values.Average(x => x.DiscretTime),
             CountLines = values.Count,
-            MedianaByParameters = CalculateMediana(values.Select(x=>x.Parameter).ToList()),
+            MedianaByParameters = CalculateMediana(values.Select(x => x.Parameter).ToList()),
             DateTimePeriod = GetPeriodFromTimeSpan(values.Max(x => x.DateTime).Subtract(values.Min(x => x.DateTime))),
             Values = values
         };
@@ -28,10 +28,12 @@ public class ResultHelper : IResultHelperService
 
     public PeriodModel GetPeriodFromTimeSpan(TimeSpan timeSpan)
     {
-        if (timeSpan.Days < 0 || timeSpan.Hours < 0 || timeSpan.Minutes <0 || timeSpan.Seconds < 0)
-        {
+        if (timeSpan.Days < MinCorrectValueForDifferenceBetweenDates
+            || timeSpan.Hours < MinCorrectValueForDifferenceBetweenDates
+            || timeSpan.Minutes < MinCorrectValueForDifferenceBetweenDates
+            || timeSpan.Seconds < MinCorrectValueForDifferenceBetweenDates)
             throw new ArgumentException("Incorrect TimeSpan value");
-        }
+
         var period = new PeriodModel
         {
             Days = timeSpan.Days,
@@ -46,14 +48,13 @@ public class ResultHelper : IResultHelperService
     public double CalculateMediana(List<double> values)
     {
         var countValues = values.Count;
-        if (countValues < 1)
-        {
-            throw new CountLinesException("The file must contain at least one line");
-        }
+        if (countValues < MinCountOfValues)
+            throw new ArgumentException("The list of values must contain at least one value");
+
         values.Sort();
         double mediana = values[countValues / 2];
 
-        if ( countValues % 2 == 1) return mediana;
+        if (countValues % 2 == 1) return mediana;
 
         mediana += values[countValues / 2 - 1];
         mediana /= 2;

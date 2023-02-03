@@ -1,6 +1,5 @@
 using InfoTecs.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 namespace InfoTecs.DAL.Tests
 {
@@ -9,12 +8,13 @@ namespace InfoTecs.DAL.Tests
         private InfotecsDataContext _context;
         private ResultRepository _repository;
         private ResultRepositoryTestData _testData;
+        private const string DatabaseName = "InfotecsTestDb";
 
         [SetUp]
         public void Setup()
         {
             var options = new DbContextOptionsBuilder<InfotecsDataContext>()
-                              .UseInMemoryDatabase(databaseName: "InfotecsTestDb")
+                              .UseInMemoryDatabase(databaseName: DatabaseName)
                               .Options;
 
             _context = new InfotecsDataContext(options);
@@ -137,7 +137,7 @@ namespace InfoTecs.DAL.Tests
             _repository.RemoveResult(results[0]);
             var result = _context.Results.FirstOrDefault(x => x.Id == id);
             var period = _context.Periods.FirstOrDefault(x => x.Id == periodId);
-           
+
             //than
             Assert.IsNull(result);
             Assert.IsNull(period);

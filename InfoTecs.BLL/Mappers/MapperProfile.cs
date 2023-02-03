@@ -1,7 +1,7 @@
-﻿using InfoTecs.BLL.Models;
-using AutoMapper;
-using InfoTecs.DAL.Entities;
+﻿using AutoMapper;
+using InfoTecs.BLL.Models;
 using InfoTecs.DAL.Additions;
+using InfoTecs.DAL.Entities;
 
 namespace InfoTecs.BLL.Mappers;
 

@@ -1,12 +1,6 @@
-﻿using InfoTecs.DAL;
+﻿using InfoTecs.DAL.Additions;
 using InfoTecs.DAL.Entities;
-using InfoTecs.DAL.Additions;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace InfoTecs.DAL.Repositories
 {

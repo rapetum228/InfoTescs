@@ -1,12 +1,6 @@
-﻿using InfoTecs.BLL.Exceptions;
-using InfoTecs.BLL.Helpers;
+﻿using InfoTecs.BLL.Helpers;
 using InfoTecs.BLL.Models;
 using InfoTecs.BLL.Tests.HelperTests.TestData;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace InfoTecs.BLL.Tests.HelperTests
 {
@@ -36,7 +30,7 @@ namespace InfoTecs.BLL.Tests.HelperTests
             var expected = _testData.GetExpectedMediana(numberCase);
 
             //when
-            var actual =_resultHelper.CalculateMediana(values);
+            var actual = _resultHelper.CalculateMediana(values);
 
             //than
             Assert.That(expected, Is.EqualTo(actual));
@@ -47,9 +41,9 @@ namespace InfoTecs.BLL.Tests.HelperTests
         {
             //given
             var values = new List<double>();
-            var expected = "The file must contain at least one line";
+            var expected = "The list of values must contain at least one value";
             //when
-            Exception ex = Assert.Throws(typeof(CountLinesException), () => _resultHelper.CalculateMediana(values));
+            Exception ex = Assert.Throws(typeof(ArgumentException), () => _resultHelper.CalculateMediana(values));
 
             //than
             Assert.That(expected, Is.EqualTo(ex.Message));
@@ -106,9 +100,9 @@ namespace InfoTecs.BLL.Tests.HelperTests
         {
             //given
             var values = new List<ValueModel>();
-            var expected = "The file must contain at least one line";
+            var expected = "The list of values must contain at least one value";
             //when
-            Exception ex = Assert.Throws(typeof(CountLinesException), () => _resultHelper.CalculateResult(values));
+            Exception ex = Assert.Throws(typeof(ArgumentException), () => _resultHelper.CalculateResult(values));
 
             //than
             Assert.That(expected, Is.EqualTo(ex.Message));

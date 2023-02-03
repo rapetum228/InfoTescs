@@ -3,16 +3,16 @@ using InfoTecs.DAL.Entities;
 
 namespace InfoTecs.BLL.Tests.ServiceTests
 {
-    public class ValueServiceTestData
+    public class ResultServiceTestData
     {
         public async Task<List<Result>?> GetResultsForTest(int numberCase = 0)
         {
             return numberCase switch
             {
                 1 => new List<Result>
-                    {
-                        
-                    },
+                {
+
+                },
                 2 => null,
                 _ => new List<Result>
                     {

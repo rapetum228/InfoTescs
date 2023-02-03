@@ -1,10 +1,10 @@
-﻿using InfoTecs.BLL.Helpers;
+﻿using InfoTecs.Api.Services;
+using InfoTecs.BLL.Helpers;
 using InfoTecs.BLL.Mappers;
-using InfoTecs.Api.Services;
-using InfoTecs.DAL;
-using Microsoft.EntityFrameworkCore;
-using InfoTecs.DAL.Repositories;
 using InfoTecs.BLL.Services;
+using InfoTecs.DAL;
+using InfoTecs.DAL.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api.Infastructures;
 
@@ -12,8 +12,8 @@ public static class ServiceProviderExtension
 {
     public static void RegisterServices(this IServiceCollection services)
     {
-        services.AddScoped<IValueService, ValueService>();
-        services.AddScoped<IFileProcessingService, FileProcessingService>();
+        services.AddScoped<IResultService, ResultService>();
+        services.AddScoped<IFileProcessinger, FileProcessinger>();
         services.AddAutoMapper(typeof(MapperProfile).Assembly);
         services.AddScoped<IValueHelperService, ValueHelper>();
         services.AddScoped<IResultHelperService, ResultHelper>();
@@ -22,9 +22,12 @@ public static class ServiceProviderExtension
 
     public static void AddDbContext(this IServiceCollection services, ConfigurationManager configuration)
     {
+        var connectionString = "MSSql";
+        var projectForMigrations = "InfoTecs.Api";
+
         services.AddDbContext<InfotecsDataContext>(options =>
         {
-            options.UseSqlServer(configuration.GetConnectionString("MSSql"), b => b.MigrationsAssembly("InfoTecs.Api"));
+            options.UseSqlServer(configuration.GetConnectionString(connectionString), b => b.MigrationsAssembly(projectForMigrations));
         }, contextLifetime: ServiceLifetime.Scoped);
     }
 
@@ -33,9 +36,6 @@ public static class ServiceProviderExtension
         services.AddSwaggerGen(config =>
         {
             config.EnableAnnotations();
-            //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-            //config.IncludeXmlComments(xmlPath);
         });
     }
 
