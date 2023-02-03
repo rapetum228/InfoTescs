@@ -5,6 +5,7 @@ using InfoTecs.BLL.Services;
 using InfoTecs.DAL;
 using InfoTecs.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 namespace InfoTecs.Api.Extensions;
 
@@ -36,6 +37,16 @@ public static class ServiceProviderExtension
         services.AddSwaggerGen(config =>
         {
             config.EnableAnnotations();
+            config.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Title = "InfoTecs",
+                Version = "v1",
+                Contact = new OpenApiContact
+                {
+                    Name = "Git Repository",
+                    Url = new Uri("https://github.com/rapetum228/InfoTescs.git"),
+                }
+            });
         });
     }
 
