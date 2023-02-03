@@ -6,7 +6,7 @@ using InfoTecs.DAL;
 using InfoTecs.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace Api.Infastructures;
+namespace InfoTecs.Api.Extensions;
 
 public static class ServiceProviderExtension
 {

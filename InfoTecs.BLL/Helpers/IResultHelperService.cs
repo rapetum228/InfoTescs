@@ -1,9 +1,8 @@
 ﻿using InfoTecs.BLL.Models;
 
-namespace InfoTecs.BLL.Helpers
+namespace InfoTecs.BLL.Helpers;
+
+public interface IResultHelperService
 {
-    public interface IResultHelperService
-    {
-        ResultModel CalculateResult(List<ValueModel> values);
-    }
+    ResultModel CalculateResult(List<ValueModel> values);
 }

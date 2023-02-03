@@ -1,9 +1,8 @@
 ﻿using InfoTecs.BLL.Models;
 
-namespace InfoTecs.BLL.Helpers
+namespace InfoTecs.BLL.Helpers;
+
+public interface IValueHelperService
 {
-    public interface IValueHelperService
-    {
-        List<ValueModel> ReadValuesFromLines(ICollection<string?> lines);
-    }
+    List<ValueModel> ReadValuesFromLines(ICollection<string?> lines);
 }

@@ -12,13 +12,13 @@ namespace InfoTecs.Api.Controllers;
 public class ResultController : ControllerBase
 {
     private readonly IResultService _resultService;
-    private readonly IFileProcessinger _fileProcessingService;
+    private readonly IFileProcessinger _fileProcessinger;
     private readonly IMapper _mapper;
 
-    public ResultController(IResultService resultService, IFileProcessinger fileProcessingService, IMapper mapper)
+    public ResultController(IResultService resultService, IFileProcessinger fileProcessinger, IMapper mapper)
     {
         _resultService = resultService;
-        _fileProcessingService = fileProcessingService;
+        _fileProcessinger = fileProcessinger;
         _mapper = mapper;
     }
 
@@ -26,7 +26,7 @@ public class ResultController : ControllerBase
     [HttpPost]
     public async Task<ResultOutputModel> UploadCsvFileAndGetResult(IFormFile file)
     {
-        var meta = await _fileProcessingService.CheckFileAndGetMetaAsync(file);
+        var meta = await _fileProcessinger.CheckFileAndGetMetaAsync(file);
 
         var resultModel = await _resultService.ProcessingDataToResult(meta!);
 
@@ -57,9 +57,9 @@ public class ResultController : ControllerBase
     {
         var values = await _resultService.GetValuesByFileNameAsync(fileName);
 
-        var bytes = _fileProcessingService.WriteBytesValuesInJson(values);
+        var bytes = _fileProcessinger.WriteBytesValuesInJson(values);
 
-        var result = _fileProcessingService.GetJsonFileFromBytes(bytes, fileName);
+        var result = _fileProcessinger.GetJsonFileFromBytes(bytes, fileName);
 
         return result;
     }
